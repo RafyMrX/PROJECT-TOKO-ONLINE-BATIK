@@ -17,6 +17,8 @@ if(isset($_SESSION['kd_cs'])){
 	<script  src="js/bootstrap.min.js"></script>
 
 
+
+
 </head>
 <body>
 	<div class="container-fluid">
@@ -91,6 +93,7 @@ if(isset($_SESSION['kd_cs'])){
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="glyphicon glyphicon-user"></i> <?= $_SESSION['user']; ?> <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 								<li><a href="proses/logout.php">Log Out</a></li>
+								<li><a href="selesai.php">Pesanan Saya</a></li>
 							</ul>
 						</li>
 

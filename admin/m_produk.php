@@ -27,8 +27,20 @@ include 'header.php';
 						<td><?= $row['kode_produk']; ?></td>
 						<td><?= $row['nama'];  ?></td>
 						<td><img src="../image/produk/<?= $row['image']; ?>" width="100"></td>
-						<td>Rp.<?= number_format($row['harga' ]);  ?></td>
-						<td><a href="edit_produk.php?kode=<?= $row['kode_produk']; ?>" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i> </a> <a href="proses/del_produk.php?kode=<?= $row['kode_produk']; ?>" class="btn btn-danger" onclick="return confirm('Yakin Ingin Menghapus Data ?')"><i class="glyphicon glyphicon-trash"></i> </a> <a href="bom.php?kode=<?= $row['kode_produk']; ?>" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-eye-open"></i> Lihat BOM</button></td>
+						<td>
+							<?php 
+							if(strpos($row['harga'], ",") == false){
+								echo "Rp.".$row['harga']."";
+							}else{
+								$a = explode(",", $row['harga']);
+								echo "Rp".$a[0]." - ".end($a);  
+
+							}
+							 ?>
+								
+
+							</td>
+						<td><a href="edit_produk.php?kode=<?= $row['kode_produk']; ?>" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i> </a> <a href="proses/del_produk.php?kode=<?= $row['kode_produk']; ?>" class="btn btn-danger" onclick="return confirm('Yakin Ingin Menghapus Data ?')"><i class="glyphicon glyphicon-trash"></i> </a>
 					</tr>
 				<?php
 					$no++; 

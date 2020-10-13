@@ -51,129 +51,171 @@ $t_cs = mysqli_fetch_assoc($cs);
 							?>
 							<td style="color: red;font-weight: bold;">Pesanan Ditolak
 								<?php 
-							}
+							}else{
 								?>
-							
-					
-						</td>
-						<td>2020/26-01</td>
-						<td>
-							<?php if( $row['terima']==0 && $row['tolak']==0){ ?>
-								<a href="proses/terima.php?inv=<?= $row['invoice']; ?>&kdp=<?= $row['kode_produk']; ?>" class="btn btn-success"><i class="glyphicon glyphicon-ok-sign"></i> Terima</a> 
-								<a href="proses/tolak.php?inv=<?= $row['invoice']; ?>" class="btn btn-danger" onclick="return confirm('Yakin Ingin Menolak ?')"><i class="glyphicon glyphicon-remove-sign"></i> Tolak</a> 
-							<?php } ?>
+								<td style="color: warning;font-weight: bold;">Pesanan Baru
 
-							<a href="detailorder.php?inv=<?= $row['invoice']; ?>&cs=<?= $row['kode_customer']; ?>" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-eye-open"></i> Detail Pesanan</a>
-						</td>
-					</tr>
-					<?php
-					$no++; 
-				}
-				?>
-
-			</tbody>
-		</table>
-
-	
+									<?php
+								}
+								?>
 
 
+							</td>
+							<td>2020/26-01</td>
+							<td>
+								<?php if( $row['terima']==0 && $row['tolak']==0){ ?>
+									<a href="proses/terima.php?inv=<?= $row['invoice']; ?>&kdp=<?= $row['kode_produk']; ?>" class="btn btn-success"><i class="glyphicon glyphicon-ok-sign"></i> Terima</a> 
+									<a href="proses/tolak.php?inv=<?= $row['invoice']; ?>" class="btn btn-danger" onclick="return confirm('Yakin Ingin Menolak ?')"><i class="glyphicon glyphicon-remove-sign"></i> Tolak</a> 
+								<?php } ?>
 
-	<button type="hidden" data-toggle="modal" data-target="#myModal" id="btn" style="background-color: #fff; border: #fff;">
-	</button>
-	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<a href="m_produk.php" class="btn btn-default close"></a>
-					<h4 class="modal-title" id="myModalLabel">#<?= $t_order['invoice']; ?></h4>
-				</div>
-				<div class="modal-body">
-					<table class="table table-striped">
-						<tr>
-							<td>Invoice</td>
-							<td><?= $t_order['invoice']; ?></td>
+								<a href="detailorder.php?inv=<?= $row['invoice']; ?>&cs=<?= $row['kode_customer']; ?>" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-eye-open"></i> Detail Pesanan</a>
+							</td>
 						</tr>
-						<tr>
-							<td>Kode Customer</td>
-							<td><?= $t_order['kode_customer']; ?></td>
-						</tr>
-						<tr>
-							<td>Nama</td>
-							<td><?= $t_cs['nama']; ?></td>
-						</tr>
-						<tr>
-							<td>Alamat</td>
-							<td><?php echo  $t_order['alamat'].",".$t_order['kota']." ".$t_order['provinsi'].",".$t_order['kode_pos']; ?></td>
-						</tr>
-						<tr>
-							<td>No Telp</td>
-							<td><?= $t_cs['telp']; ?></td>
-						</tr>
-					</table>
+						<?php
+						$no++; 
+					}
+					?>
 
-					<hr>
-					<h4>List Order</h4>
-					<table class="table table-striped">
-						<tr>
-							<th>No</th>
-							<th>Kode Produk</th>
-							<th>Nama Produk</th>
-							<th>Harga</th>
-							<th>qty</th>
-							<th>Subtotal</th>
-						</tr>
-					<?php 
-						$order = mysqli_query($conn, "SELECT * FROM produksi WHERE invoice = '$invoices'");
-						$no = 1;
-						$grand = 0;
-						while ($list = mysqli_fetch_assoc($order)) {
-					 ?>
-						<tr>
-							<td><?= $no;  ?></td>
-							<td><?= $list['kode_produk']; ?></td>
-							<td><?= $list['nama_produk']; ?></td>
-							<td><?= number_format($list['harga'], 0, ".", ".");  ?></td>
-							<td><?= $list['qty'];  ?></td>
-							<td><?= number_format($list['harga']*$list['qty'], 0, ".", ".");  ?></td>
-						</tr>
-					<?php 
-						$sub = $list['harga'] * $list['qty'];
-						$grand += $sub;
-						$no++;
-						}
-					 ?>
-						<tr>
-							<td colspan="6" class="text-right"><b>Grand Total = <?= number_format($grand, 0, ".", ".");  ?></b></td>
-						</tr>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<a href="produksi.php" class="btn btn-default">Close</a>
+				</tbody>
+			</table>
+
+
+
+
+
+			<button type="hidden" data-toggle="modal" data-target="#myModal" id="btn" style="background-color: #fff; border: #fff;">
+			</button>
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<a href="m_produk.php" class="btn btn-default close"></a>
+							<span style="margin-right: 200px;" class="modal-title" id="myModalLabel">#<?= $t_order['invoice']; ?></span>
+							<span class="modal-title text-right">Batas Pembayaran : <?php echo $t_order['tanggal']; ?></span>
+						</div>
+						<div class="modal-body">
+							<h4>Data Customer</h4>
+							<table class="table table-striped">
+								<tr>
+									<td>Invoice</td>
+									<td><?= $t_order['invoice']; ?></td>
+								</tr>
+								<tr>
+									<td>Kode Customer</td>
+									<td><?= $t_order['kode_customer']; ?></td>
+								</tr>
+								<tr>
+									<td>Nama</td>
+									<td><?= $t_cs['nama']; ?></td>
+								</tr>
+								<tr>
+									<td>Alamat</td>
+									<td><?php echo  $t_order['alamat'].",".$t_order['kota']." ".$t_order['provinsi'].",".$t_order['kode_pos']; ?></td>
+								</tr>
+								<tr>
+									<td>No Telp</td>
+									<td><?= $t_cs['telp']; ?></td>
+								</tr>
+							</table>
+							<hr>
+							<h4>Ekspedisi/Pengiriman</h4>
+							<table class="table table-striped">
+								<tr>
+									<th>Ekspedisi</th>
+									<th>Paket Ekspedisi</th>
+								</tr>
+								<tr>
+									<td><?= strtoupper($t_order['ekspedisi']);  ?></td>
+									<td><?= $t_order['paket_ekspedisi'];  ?></td>
+								</tr>
+							</table>
+							<hr>
+							<h4>List Order</h4>
+							<table class="table table-striped">
+								<tr>
+									<th>No</th>
+									<th>Kode Produk</th>
+									<th>Nama Produk</th>
+									<th>Ukuran</th>
+									<th>Harga</th>
+									<th>qty</th>
+									<th>Subtotal</th>
+								</tr>
+								<?php 
+								$order = mysqli_query($conn, "SELECT * FROM produksi WHERE invoice = '$invoices'");
+								$no = 1;
+								$grand = 0;
+								while ($list = mysqli_fetch_assoc($order)) {
+									?>
+									<tr>
+										<td><?= $no;  ?></td>
+										<td><?= $list['kode_produk']; ?></td>
+										<td><?= $list['nama_produk']; ?></td>
+										<td><?= strtoupper($list['ukuran']); ?></td>
+										<td><?= number_format($list['harga'], 0, ".", ".");  ?></td>
+										<td><?= $list['qty'];  ?></td>
+										<td><?= number_format($list['harga']*$list['qty'], 0, ".", ".");  ?></td>
+									</tr>
+									<?php 
+									$sub = $list['harga'] * $list['qty'];
+									$grand += $sub;
+									$no++;
+									$grands = $list['grand_total'];
+									$tf = $list['images'];
+									$ong = $list['ongkir'];
+								}
+								?>
+								<tr>
+									<td colspan="7" class="text-right alert alert-warning"><b>Grand Total = <?= number_format($grand+$ong, 0, ".", ".");  ?></b></td>
+								</tr>
+								<tr>
+									<td colspan="7" class="text-right alert alert-success"><b>Nominal yang  dibayar = <?= number_format($grands+$ong, 0, ".", ".");  ?></b></td>
+								</tr>
+							</table>
+							<hr>
+							<h4>Bukti Transfer</h4>
+							<?php 
+							if(!empty($tf)){
+								?>
+
+								<img src="image/tf/<?php echo $tf; ?>" width="300">
+
+								<?php
+							}else{
+								?>
+
+								<p>Tidak Ada Bukti Transfer yang di upload</p>
+								<?php
+							}
+							?>
+						</div>
+						<div class="modal-footer">
+							<a href="produksi.php" class="btn btn-default">Close</a>
+						</div>
+					</div>
 				</div>
 			</div>
+
+
 		</div>
-	</div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<script type="text/javascript">
+			$( document ).ready(function() {
+				$( "#btn" ).click();
+			});
+		</script>
 
-	
-	</div>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-<script type="text/javascript">
-	$( document ).ready(function() {
-		$( "#btn" ).click();
-	});
-</script>
-
-	<?php 
-	include 'footer.php';
-	?>
+		<?php 
+		include 'footer.php';
+		?>

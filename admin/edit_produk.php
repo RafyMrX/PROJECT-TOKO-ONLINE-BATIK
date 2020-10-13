@@ -27,20 +27,56 @@ $data = mysqli_fetch_assoc($kode);
 					<input type="hidden" name="kode" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Nama Produk"  value="<?= $data['kode_produk']; ?>">
 				</div>
 			</div>
-		</div>
-
-		<div class="row">
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="exampleInputEmail1">Nama Produk</label>
 					<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Masukkan Nama Produk" name="nama" value="<?= $data['nama']; ?>">
 				</div>
 			</div>
+		</div>
+<?php 
+$arr = explode(",", $data['ukuran']);
+$arr2 = explode(",", $data['harga']);
+$jml = count($arr);
+
+for ($a=0; $a < $jml ; $a++) { 
+ ?>
+	<div class="row">
+			<div class="col-md-6">
+				<div class="form-group form-check">
+					<label for="exampleInputEmail1">Ukuran</label><br>
+					<select name="ukuran[]" class="form-control">
+					<?php for ($i=0; $i < $jml ; $i++) { 
+						if ($arr[$a] == $arr[$i]) {
+							$select = "selected";
+						}
+						else{
+							$select = "";
+						}
+					 ?>
+						<option <?php echo $select; ?> value="<?php echo $arr[$i] ?>"><?php echo strtoupper($arr[$i]); ?></option>
+
+					<?php } ?>
+					</select>
+				</div>
+			</div>
 
 			<div class="col-md-6">
 				<div class="form-group">
 					<label for="exampleInputEmail1">Harga</label>
-					<input type="number" class="form-control" id="exampleInputEmail1" placeholder="masukkan Harga" name="harga" value="<?= $data['harga']; ?>">
+					<input type="number" class="form-control" id="exampleInputEmail1" placeholder="Contoh : 12000" name="harga[]" value="<?php echo $arr2[$a]; ?>">
+					<p class="help-block">Isi Harga tanpa menggunakan Titik(.) atau Koma (,)</p>
+				</div>
+			</div>
+		</div>
+<?php 
+	}
+ ?>
+<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<label for="exampleInputEmail1">Berat (Gram)</label>
+					<input type="text" class="form-control" id="exampleInputEmail1" placeholder="Contoh : Masukkan dalam satuan Gram" name="berat" value="<?php echo $data['berat']; ?>">					
 				</div>
 			</div>
 		</div>
@@ -51,80 +87,7 @@ $data = mysqli_fetch_assoc($kode);
 				<?= $data['deskripsi']; ?>
 			</textarea>
 		</div>
-		<hr>
-		<h3 style=" width: 100%; border-bottom: 4px solid gray">BOM Produk</h3>
-
-		<div class="row">
-			<div class="col-md-6">
-				<h4>Daftar Material</h4>
-				<table class="table table-striped ">
-					<thead>
-						<tr>
-							<th scope="col">No</th>
-							<th scope="col">Kode Material</th>
-							<th scope="col">Nama Material</th>
-						</tr>
-					</thead>
-					<?php 
-					$result2 = mysqli_query($conn, "SELECT * FROM inventory order by kode_bk asc");
-					$no2 =1;
-					while ($row2 = mysqli_fetch_assoc($result2)) {
-						?>
-						<tbody>
-							<tr>
-								<th scope="row"><?= $no2;  ?></th>
-								<td><?= $row2['kode_bk']; ?></td>
-								<td><?= $row2['nama']; ?></td>
-
-							</tr>
-						</tbody>
-						<?php 
-						$no2++;
-					}
-					?>
-				</table>
-			</div>
-
-
-			<div class="col-md-6">
-				<h4>Pilih material yang hanya dibutuhkan untuk produk</h4>
-				<div class="bg-danger" style="padding: 5px;">
-				<p style="color: red; font-weight: bold;">NB. Form dibawah tidak harus diisi semua</p>
-				<p style="color: red; font-weight: bold;">Kode Material tidak boleh sama</p>
-				</div>
-				<br>
-				<?php 
-				$result3 = mysqli_query($conn, "SELECT * FROM bom_produk where kode_produk = '$kode_produk'");
-				$jml = mysqli_num_rows($result3);
-				$no3 = 1;
-				while ($no3 <= $jml) {
-				$row3 = mysqli_fetch_assoc($result3);
-					?>
-
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label for="exampleInputPassword1">Kode Material</label>
-								<input type="text" name="material[]" class="form-control" placeholder="Masukkan Kode Material" value="<?= $row3['kode_bk']; ?>" required>
-							</div>
-						</div>
-
-						<div class="col-md-6">
-							<div class="form-group">
-								<label >Kebutuhan Material</label>
-								<input type="text" class="form-control"placeholder="Contoh : 250 atau 0.2" name="keb[]" value="<?= $row3['kebutuhan']; ?>" required>
-								
-							</div>
-						</div>
-					</div>
-					<?php 
-					$no3++;
-				}	
-				?>
-
-			</div>
-
-		</div>
+		
 		<div class="row">
 			
 			<div class="col-md-6">
@@ -137,10 +100,9 @@ $data = mysqli_fetch_assoc($kode);
 
 		<br>
 
-	</div>
 </form>
+	</div>
 
-</div>
 
 
 <br>

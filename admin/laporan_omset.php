@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
 	}
 </style>
 <div class="container">
-	<h2 style=" width: 100%; border-bottom: 4px solid gray; padding-bottom: 5px;"><b>Laporan Omset</b></h2>
+	<h2 style=" width: 100%; border-bottom: 4px solid gray; padding-bottom: 5px;"><b>Laporan Penjualan</b></h2>
 	<div class="row print">
 		<div class="col-md-9">
 			<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
@@ -59,9 +59,10 @@ if(isset($_POST['submit'])){
 		</tr>
 		<?php 
 		if(isset($_POST['submit'])){
-			$result = mysqli_query($conn, "SELECT * FROM produksi WHERE terima = 1 and tanggal between '$date1' and '$date2'");
+			$result = mysqli_query($conn, "SELECT * FROM produksi WHERE terima = 1 and tgl between '$date1' and '$date2'");
 			$no=1;
 			$total = 0;
+			$t = 0;
 			while ($row = mysqli_fetch_assoc($result)) {
 				?>
 				<tr>
@@ -71,16 +72,20 @@ if(isset($_POST['submit'])){
 					<td><?=  number_format($row['harga']); ?></td>
 					<td><?= $row['qty']; ?></td>
 					<td><?= number_format($row['harga']*$row['qty']); ?></td>
-					<td><?= $row['tanggal']; ?></td>
+					<td><?= $row['tgl']; ?></td>
 				</tr>
 				<?php 
+				$t += $row['qty'];
 				$total += $row['harga']*$row['qty'];
 				$no++;
 			}
 
 			?>
 			<tr>
-				<td colspan="7" class="text-right"><b>Total Pendapatan Kotor = <?= number_format($total); ?></b></td>
+				<td colspan="7" class="text-right"><b>Total Penjualan = <?=  $t; ?></b></td>
+			</tr>
+			<tr>
+				<td colspan="7" class="text-right alert-success"><b>Total Pendapatan  = <?= number_format($total); ?></b></td>
 			</tr>
 		<?php 	} ?>
 	</table>

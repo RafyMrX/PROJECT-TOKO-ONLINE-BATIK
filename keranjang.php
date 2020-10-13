@@ -1,5 +1,7 @@
 <?php 
 include 'header.php';
+
+
 if(isset($_POST['submit1'])){
 	$id_keranjang = $_POST['id'];
 	$qty = $_POST['qty'];
@@ -48,6 +50,7 @@ if(isset($_POST['submit1'])){
 							<th scope="col">Nama</th>
 							<th scope="col">Harga</th>
 							<th scope="col">Qty</th>
+							<th scope="col">Ukuran</th>
 							<th scope="col">SubTotal</th>
 							<th scope="col">Action</th>
 						</tr>
@@ -56,7 +59,8 @@ if(isset($_POST['submit1'])){
 					if(isset($_SESSION['kd_cs'])){
 						$kode_cs = $_SESSION['kd_cs'];
 
-						$result = mysqli_query($conn, "SELECT k.id_keranjang as keranjang, k.kode_produk as kd, k.nama_produk as nama, k.qty as jml, p.image as gambar, p.harga as hrg FROM keranjang k join produk p on k.kode_produk=p.kode_produk WHERE kode_customer = '$kode_cs'");
+
+						$result = mysqli_query($conn, "SELECT k.id_keranjang as keranjang, k.kode_produk as kd, k.nama_produk as nama, k.qty as jml, p.image as gambar, k.harga as hrg, k.ukuran as ukuran FROM keranjang k join produk p on k.kode_produk=p.kode_produk WHERE kode_customer = '$kode_cs'");
 						$no = 1;
 						$hasil = 0;
 						while($row = mysqli_fetch_assoc($result)){
@@ -71,6 +75,7 @@ if(isset($_POST['submit1'])){
 							<td><?= $row['nama']; ?></td>
 							<td>Rp.<?= number_format($row['hrg']);  ?></td>
 							<td><input type="number" name="qty" class="form-control" style="text-align: center;" value="<?= $row['jml']; ?>"></td>
+							<td><?= strtoupper($row['ukuran']);  ?></td>
 							<td>Rp.<?= number_format($row['hrg'] * $row['jml']);  ?></td>
 							<td><button type="submit" name="submit1" class="btn btn-warning">Update</button> | <a href="keranjang.php?del=1&id=<?= $row['keranjang']; ?>" class="btn btn-danger" onclick="return confirm('Yakin ingin dihapus ?')">Delete</a></td>
 						</tr>
@@ -84,10 +89,10 @@ if(isset($_POST['submit1'])){
 					 ?>
 					 
 						<tr>
-							<td colspan="7" style="text-align: right; font-weight: bold;">Grand Total = Rp.<?= number_format($hasil); ?></td>
+							<td colspan="8" style="text-align: right; font-weight: bold;">Grand Total = Rp.<?= number_format($hasil); ?></td>
 						</tr>
 						<tr>
-							<td colspan="7" style="text-align: right; font-weight: bold;"><a href="index.php" class="btn btn-success">Lanjutkan Belanja</a> <a href="checkout.php?kode_cs=<?= $kode_cs; ?>" class="btn btn-primary">Checkout</a></td>
+							<td colspan="8" style="text-align: right; font-weight: bold;"><a href="index.php" class="btn btn-success">Lanjutkan Belanja</a> <a href="checkout.php?kode_cs=<?= $kode_cs; ?>" class="btn btn-primary">Checkout</a></td>
 						</tr>
 						<?php 
 					}else{

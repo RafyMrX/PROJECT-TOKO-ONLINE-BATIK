@@ -56,7 +56,7 @@ if(isset($_POST['submit'])){
 		</tr>
 		<?php 
 		if(isset($_POST['submit'])){
-		$result = mysqli_query($conn, "SELECT * FROM produksi WHERE terima = 1 and tanggal between '$date1' and '$date2'");
+		$result = mysqli_query($conn, "SELECT * FROM produksi WHERE terima = 1 and tgl between '$date1' and '$date2'");
 		$no=1;
 		$total = 0;
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -64,7 +64,7 @@ if(isset($_POST['submit'])){
 			<tr>
 				<td><?= $no; ?></td>
 				<td><?= $row['nama_produk']; ?></td>
-				<td><?= $row['tanggal']; ?></td>
+				<td><?= $row['tgl']; ?></td>
 				<td><?= $row['qty']; ?></td>
 			</tr>
 			<?php 

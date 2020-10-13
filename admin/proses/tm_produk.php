@@ -33,10 +33,10 @@ $size_gambar = $_FILES['files']['size'];
 $tmp_file = $_FILES['files']['tmp_name'];
 $eror = $_FILES['files']['error'];
 $type = $_FILES['files']['type'];
+$ukuran = $_POST['ukuran'];
+$harga = $_POST['harga'];
+$berat = $_POST['berat'];
 
-// BOM
-$kd_material = $_POST['material'];
-$keb = $_POST['keb'];
 
 
 if($eror === 4){
@@ -77,19 +77,26 @@ $namaGambarBaru = uniqid();
 $namaGambarBaru.=".";
 $namaGambarBaru.=$ekstensiGambarValid;
 
+
 if (move_uploaded_file($tmp_file, "../../image/produk/".$namaGambarBaru)) {
 
-	$result = mysqli_query($conn, "INSERT INTO produk VALUES('$kode','$nm_produk','$namaGambarBaru','$desk','$harga')");
+	
 
-	$filter = array_filter($kd_material);
-	$jml = count($filter) - 1;
-	$no = 0;
-	while ($no <= $jml) {
-
-		mysqli_query($conn, "INSERT INTO bom_produk VALUES('$format','$kd_material[$no]','$kode','$nm_produk','$keb[$no]')");
-		$no++;
+	$array = array_filter($harga);
+	$uk = "";
+	$hrg = "";
+	foreach ($array as $key => $value) {
+		$hrg.=$value.",";
 	}
+		foreach ($ukuran as $key => $v) {
+			$uk.=$v.",";
+		}
+	$huk = rtrim($uk,",");
+	$hhrg = rtrim($hrg,",");
 
+
+		$result = mysqli_query($conn, "INSERT INTO produk VALUES('$kode','$nm_produk','$namaGambarBaru','$desk','$hhrg', '$huk', '$berat')");
+		
 	if($result){
 		echo "
 		<script>
@@ -98,9 +105,10 @@ if (move_uploaded_file($tmp_file, "../../image/produk/".$namaGambarBaru)) {
 		</script>
 		";
 	}
+	}
 
 
-}
+
 
 
 

@@ -2,9 +2,11 @@
 include 'header.php';
 $kode = mysqli_real_escape_string($conn,$_GET['produk']);
 $result = mysqli_query($conn, "SELECT * FROM produk WHERE kode_produk = '$kode'");
+$jml = mysqli_num_rows($result);
 $row = mysqli_fetch_assoc($result);
 
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <div class="container">
 	<h2 style=" width: 100%; border-bottom: 4px solid #ff8680"><b>Detail produk</b></h2>
 
@@ -18,8 +20,10 @@ $row = mysqli_fetch_assoc($result);
 		<div class="col-md-8">
 			<form action="proses/add.php" method="GET">
 				<input type="hidden" name="kd_cs" value="<?= $kode_cs; ?>">
-				<input type="hidden" name="produk" value="<?= $kode;  ?>">
+				<input type="hidden" name="berat" value="<?php echo $row['berat']; ?>">
+				<input type="hidden" id="kode" name="produk" value="<?= $kode;  ?>">
 				<input type="hidden" name="hal"  value="2">
+				<input type="hidden" name="harga" value="" id="setharga">
 				<table class="table table-striped">
 					<tbody>
 						<tr>
@@ -28,25 +32,39 @@ $row = mysqli_fetch_assoc($result);
 						</tr>
 						<tr>
 							<td><b>Harga</b></td>
-							<td>Rp.<?= number_format($row['harga']); ?></td>
+							<td id="harga">
+								<?php 
+								if(strpos($row['harga'], ",") == false){
+									echo "Rp.".number_format($row['harga'])."";
+								}else{
+									$a = explode(",", $row['harga']);
+									echo "Rp. ".number_format($a[0])." - ".number_format(end($a));  
+
+								}
+								?>
+							</td>
 						</tr>
 						<tr>
 							<td><b>Deskripsi</b></td>
 							<td><?= $row['deskripsi'];  ?></td>
 						</tr>
 						<tr>
-							<td>Ukuran</td>
+							<td><b>Ukuran</b></td>
+							<?php 
+							$arr = explode(",", $row['ukuran']);
+							$jml = count($arr);
+							?>
 							<td>
-								<select class="form-control" style="width: 155px;">
-									<option selected="">~ Pilih Ukuran ~</option>
-									<option>S</option>
-									<option>M</option>
-									<option>L</option>
-									<option>XL</option>
-									<option>XXL</option>
+								<select class="form-control" style="width: 155px;" name="ukuran" id="ukuran">
+										<option selected value="nul">-- Pilih Ukuran --</option>
+									<?php for ($i=0; $i < $jml; $i++) { 
+									?>
+										<option value="<?php echo $arr[$i]; ?>"><?php echo strtoupper($arr[$i]); ?></option>
+
+									<?php } ?>
 
 								</select>
-								<span>///MASIH PROSES</span>
+
 							</td>
 						</tr>
 						<tr>
@@ -76,6 +94,31 @@ $row = mysqli_fetch_assoc($result);
 </div>	
 <br>
 <br>
+<br>
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+
+		$("#ukuran").change(function(){
+			//Mengambil value dari option select provinsi asal, kabupaten, kurir, berat kemudian parameternya dikirim menggunakan ajax 
+			var ukuran = $('#ukuran').val();
+			var kode =  $('#kode').val();
+			
+			$.ajax({
+				type : 'POST',
+				url : 'http://localhost/inovasi/cekharga.php',
+				data :  {'ukuran' : ukuran, 'kode' : kode},
+				success: function (data) {
+				var arr = data.split("|");
+
+				$("#harga").html(arr[0]);
+				$("#setharga").val(arr[1]);
+				}
+			});
+		});
+	});
+</script>	
 
 <?php 
 include 'footer.php';

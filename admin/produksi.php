@@ -24,7 +24,7 @@ $cek_sor = mysqli_num_rows($sortage);
 		<tbody>
 
 			<?php 
-			$result = mysqli_query($conn, "SELECT DISTINCT invoice, kode_customer, status, kode_produk, qty,terima,tolak, cek FROM produksi group by invoice");
+			$result = mysqli_query($conn, "SELECT DISTINCT invoice, kode_customer, status, kode_produk, qty,terima,tolak, cek, tgl FROM produksi group by invoice");
 			$no = 1;
 			$array = 0;
 			while($row = mysqli_fetch_assoc($result)){
@@ -43,12 +43,18 @@ $cek_sor = mysqli_num_rows($sortage);
 							?>
 							<td style="color: red;font-weight: bold;">Pesanan Ditolak
 								<?php 
+							}else if($row['terima'] == 0 && empty($row['images'])){
+							?>
+								<td style="color: warning;font-weight: bold;">Pesanan Baru 
+
+							<?php
 							}
 								?>
+
 							
 					
 						</td>
-						<td>2020/26-01</td>
+						<td><?= $row['tgl']; ?></td>
 						<td>
 							<?php if( $row['terima']==0 && $row['tolak']==0){ ?>
 								<a href="proses/terima.php?inv=<?= $row['invoice']; ?>&kdp=<?= $row['kode_produk']; ?>" class="btn btn-success"><i class="glyphicon glyphicon-ok-sign"></i> Terima</a> 

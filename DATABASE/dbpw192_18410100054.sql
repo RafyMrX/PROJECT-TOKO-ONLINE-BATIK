@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 27, 2020 at 07:16 AM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.2.32
+-- Generation Time: Oct 13, 2020 at 11:04 AM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -54,21 +54,6 @@ CREATE TABLE `bom_produk` (
   `kebutuhan` varchar(200) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `bom_produk`
---
-
-INSERT INTO `bom_produk` (`kode_bom`, `kode_bk`, `kode_produk`, `nama_produk`, `kebutuhan`) VALUES
-('B0001', 'M0002', 'P0001', 'Roti Sobek', '2'),
-('B0001', 'M0001', 'P0001', 'Roti Sobek', '4'),
-('B0001', 'M0004', 'P0001', 'Roti Sobek', '3'),
-('B0002', 'M0001', 'P0002', 'Maryam', '4'),
-('B0002', 'M0004', 'P0002', 'Maryam', '3'),
-('B0002', 'M0003', 'P0002', 'Maryam', '2'),
-('B0003', 'M0002', 'P0003', 'Kue tart coklat', '2'),
-('B0003', 'M0003', 'P0003', 'Kue tart coklat', '5'),
-('B0003', 'M0005', 'P0003', 'Kue tart coklat', '5');
-
 -- --------------------------------------------------------
 
 --
@@ -90,8 +75,10 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`kode_customer`, `nama`, `email`, `username`, `password`, `telp`) VALUES
 ('C0002', 'Rafi Akbar', 'a.rafy@gmail.com', 'rafi', '$2y$10$/UjGYbisTPJhr8MgmT37qOXo1o/HJn3dhafPoSYbOlSN1E7olHIb.', '0856748564'),
-('C0003', 'Nagita Silvana', 'bambang@gmail.com', 'Nagita', '$2y$10$47./qEeA/y3rNx3UkoKmkuxoAtmz4ebHSR0t0Bc.cFEEg7cK34M3C', '087804616097'),
-('C0004', 'Nadiya', 'nadiya@gmail.com', 'nadiya', '$2y$10$6wHH.7rF1q3JtzKgAhNFy.4URchgJC8R.POT1osTAWmasDXTTO7ZG', '0898765432');
+('C0003', 'holi', 'izuddinkhubi@gmail.com', 'holi', '$2y$10$PYm57GT4NRw5BwElvUrmfu6xR9KB2xIWp8OqgLJ1iih4eSxDYBawG', '2323'),
+('C0004', 'Kain', 'izuddinkhubi@gmail.com', 'kain', '$2y$10$0mJr/adDSREVRt23iBYkfe4mspCHeZBpCq9hL8MXw567fJd.FCZsi', '12344'),
+('C0005', 'Kusuma', 'izuddinkhubi@gmail.com', 'kusuma', '$2y$10$q9LiONu7RQSgAJJSFfTedOrmiHUMbMTaTi04sfvOSA1omsRhHULjK', '7878787'),
+('C0006', 'Rafi', 'Rafy@gmail.com', 'rafymrx', '$2y$10$dOlBFaimo9eDptB/cpvU1.8qWN2MmMK5DDZacbZgKAxwEHb5LWbtm', '087804616097');
 
 -- --------------------------------------------------------
 
@@ -113,11 +100,8 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`kode_bk`, `nama`, `qty`, `satuan`, `harga`, `tanggal`) VALUES
-('M0001', 'Tepung', '76', 'Kg', 1000, '2020-07-26'),
-('M0002', 'Pengembang', '0', 'Kg', 1000, '2020-07-27'),
-('M0003', 'Cream', '17', 'Kg', 3000, '2020-07-26'),
-('M0004', 'Keju', '82', 'Kg', 4000, '2020-07-26'),
-('M0005', 'Coklat', '0', 'Kg', 5000, '2020-07-27');
+('M0001', 'Kain', '96', 'Kodi', 8000, '2020-10-05'),
+('M0002', 'Pewarna', '500', 'ml', 200, '2020-10-04');
 
 -- --------------------------------------------------------
 
@@ -131,16 +115,10 @@ CREATE TABLE `keranjang` (
   `kode_produk` varchar(100) NOT NULL,
   `nama_produk` varchar(100) NOT NULL,
   `qty` int(11) NOT NULL,
-  `harga` int(11) NOT NULL
+  `harga` int(11) NOT NULL,
+  `berat` varchar(200) NOT NULL,
+  `ukuran` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `keranjang`
---
-
-INSERT INTO `keranjang` (`id_keranjang`, `kode_customer`, `kode_produk`, `nama_produk`, `qty`, `harga`) VALUES
-(16, 'C0003', 'P0002', 'Maryam', 5, 15000),
-(17, 'C0003', 'P0003', 'Kue tart coklat', 2, 100000);
 
 -- --------------------------------------------------------
 
@@ -153,17 +131,19 @@ CREATE TABLE `produk` (
   `nama` varchar(100) NOT NULL,
   `image` text NOT NULL,
   `deskripsi` text NOT NULL,
-  `harga` int(11) NOT NULL
+  `harga` varchar(255) NOT NULL,
+  `ukuran` varchar(255) NOT NULL,
+  `berat` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `produk`
 --
 
-INSERT INTO `produk` (`kode_produk`, `nama`, `image`, `deskripsi`, `harga`) VALUES
-('P0001', 'Roti Sobek', '5f1d915d27dc3.jpg', '																								Roti Enak Sobek Sobek aww\r\n																					', 10000),
-('P0002', 'Maryam', '5f1d9154715a4.jpg', '				Roti araym\r\n						', 15000),
-('P0003', 'Kue tart coklat', '5f1d924614831.jpg', 'Kuetar dengan varian rasa coklat enak dan lumer rasanya\r\n			', 100000);
+INSERT INTO `produk` (`kode_produk`, `nama`, `image`, `deskripsi`, `harga`, `ukuran`, `berat`) VALUES
+('P0001', 'Mega Mendung', '5f8271f209bee.jpg', 'Mega Mendung\r\n									', '20000,30000', 'm,l', '500'),
+('P0002', 'Batik Sarimbit ', '5f83a163d58a7.jpg', 'Batik Sarimbit dengan motif bagus\r\n			', '15000,18000,20000,30000,50000', 's,m,l,xl,xxl', '100'),
+('P0003', 'Batik Sarimbit Kuning', '5f83a1b5616e3.jpg', 'Batik sarimbit kuning dengan motif bagus\r\n			', '20000,30000,50000', 's,l,m', '100');
 
 -- --------------------------------------------------------
 
@@ -179,28 +159,38 @@ CREATE TABLE `produksi` (
   `nama_produk` varchar(200) NOT NULL,
   `qty` int(11) NOT NULL,
   `harga` int(11) NOT NULL,
+  `ukuran` varchar(255) NOT NULL,
   `status` varchar(200) NOT NULL,
-  `tanggal` date NOT NULL,
+  `tanggal` varchar(255) NOT NULL,
   `provinsi` varchar(200) NOT NULL,
   `kota` varchar(200) NOT NULL,
   `alamat` varchar(200) NOT NULL,
   `kode_pos` varchar(200) NOT NULL,
+  `ekspedisi` varchar(255) NOT NULL,
+  `paket_ekspedisi` varchar(200) NOT NULL,
+  `ongkir` int(11) NOT NULL,
+  `etd_ekspedisi` varchar(200) NOT NULL,
   `terima` varchar(200) NOT NULL,
   `tolak` varchar(200) NOT NULL,
-  `cek` int(11) NOT NULL
+  `cek` int(11) NOT NULL,
+  `grand_total` int(11) NOT NULL,
+  `timess` varchar(255) NOT NULL,
+  `images` text NOT NULL,
+  `tgl` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `produksi`
 --
 
-INSERT INTO `produksi` (`id_order`, `invoice`, `kode_customer`, `kode_produk`, `nama_produk`, `qty`, `harga`, `status`, `tanggal`, `provinsi`, `kota`, `alamat`, `kode_pos`, `terima`, `tolak`, `cek`) VALUES
-(8, 'INV0001', 'C0002', 'P0003', 'Kue tart coklat', 1, 100000, 'Pesanan Baru', '2020-07-27', 'Jawa Timur', 'Surabaya', 'Jl.Tanah Merah Indah 1', '60129', '2', '1', 1),
-(9, 'INV0002', 'C0002', 'P0001', 'Roti Sobek', 3, 10000, 'Pesanan Baru', '2020-07-27', 'Jawa Barat', 'Bandung', 'Jl.Jati Nangor Blok C, 10', '30712', '0', '0', 1),
-(10, 'INV0003', 'C0003', 'P0002', 'Maryam', 2, 15000, '0', '2020-07-27', 'Jawa Tengah', 'Yogyakarta', 'Jl.Malioboro, Blok A 10D', '30123', '1', '0', 0),
-(11, 'INV0003', 'C0003', 'P0003', 'Kue tart coklat', 1, 100000, '0', '2020-07-27', 'Jawa Tengah', 'Yogyakarta', 'Jl.Malioboro, Blok A 10D', '30123', '1', '0', 0),
-(12, 'INV0003', 'C0003', 'P0001', 'Roti Sobek', 1, 10000, '0', '2020-07-27', 'Jawa Tengah', 'Yogyakarta', 'Jl.Malioboro, Blok A 10D', '30123', '1', '0', 0),
-(13, 'INV0004', 'C0004', 'P0002', 'Maryam', 1, 15000, 'Pesanan Baru', '2020-07-26', 'Jawa Timur', 'Sidoarjo', 'Jl.KH Syukur Blok C 18 A', '50987', '0', '0', 0);
+INSERT INTO `produksi` (`id_order`, `invoice`, `kode_customer`, `kode_produk`, `nama_produk`, `qty`, `harga`, `ukuran`, `status`, `tanggal`, `provinsi`, `kota`, `alamat`, `kode_pos`, `ekspedisi`, `paket_ekspedisi`, `ongkir`, `etd_ekspedisi`, `terima`, `tolak`, `cek`, `grand_total`, `timess`, `images`, `tgl`) VALUES
+(39, 'INV0001', 'C0005', 'P0001', 'Mega Mendung', 2, 20000, 'm', '0', 'Oct 12, 2020 02:33:09', 'Papua Barat', 'Teluk Wondama', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'OKE 179,000 5-9 Hari', 179000, '5-9', '1', '0', 0, 40006, '01:33:09', '5f83533300a31.jpg', '2020-10-12'),
+(40, 'INV0002', 'C0005', 'P0001', 'Mega Mendung', 1, 20000, 'm', '0', 'Oct 12, 2020 02:53:28', 'Jawa Timur', 'Surabaya', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'REG 7,000 2-3 Hari', 7000, '2-3', '1', '0', 0, 20003, '01:53:28', '5f835ea041f26.jpg', '2020-10-12'),
+(41, 'INV0003', 'C0006', 'P0001', 'Mega Mendung', 2, 20000, 'm', '0', 'Oct 12, 2020 08:26:53', 'Jawa Timur', 'Surabaya', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'REG 7,000 2-3 Hari', 7000, '2-3', '1', '0', 0, 100009, '07:26:53', '5f83a34f0d970.jpg', '2020-10-12'),
+(42, 'INV0003', 'C0006', 'P0003', 'Batik Sarimbit Kuning', 1, 30000, 'l', '0', 'Oct 12, 2020 08:26:53', 'Jawa Timur', 'Surabaya', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'REG 7,000 2-3 Hari', 7000, '2-3', '1', '0', 0, 100009, '07:26:53', '5f83a34f0d970.jpg', '2020-10-12'),
+(43, 'INV0003', 'C0006', 'P0002', 'Batik Sarimbit ', 1, 30000, 'xl', '0', 'Oct 12, 2020 08:26:53', 'Jawa Timur', 'Surabaya', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'REG 7,000 2-3 Hari', 7000, '2-3', '1', '0', 0, 100009, '07:26:53', '5f83a34f0d970.jpg', '2020-10-12'),
+(47, 'INV0004', 'C0006', 'P0001', 'Mega Mendung', 1, 20000, 'm', 'Pesanan Baru', 'Oct 12, 2020 09:50:17', 'Jawa Timur', 'Surabaya', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'REG 7,000 2-3 Hari', 7000, '2-3', '0', '0', 0, 20009, '08:50:17', '5f83b6a1f19c8.jpg', '2020-10-12'),
+(48, 'INV0005', 'C0006', 'P0003', 'Batik Sarimbit Kuning', 1, 30000, 'l', 'Pesanan Baru', 'Oct 13, 2020 10:26:03', 'Jawa Timur', 'Surabaya', 'Jl Tanah Merah Indah 1 No 10 C', '60129', 'jne', 'REG 7,000 2-3 Hari', 7000, '2-3', '0', '0', 0, 30005, '09:26:03', '', '2020-10-13');
 
 -- --------------------------------------------------------
 
@@ -319,12 +309,6 @@ ALTER TABLE `keranjang`
   ADD PRIMARY KEY (`id_keranjang`);
 
 --
--- Indexes for table `produk`
---
-ALTER TABLE `produk`
-  ADD PRIMARY KEY (`kode_produk`);
-
---
 -- Indexes for table `produksi`
 --
 ALTER TABLE `produksi`
@@ -381,13 +365,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `keranjang`
 --
 ALTER TABLE `keranjang`
-  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_keranjang` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `produksi`
 --
 ALTER TABLE `produksi`
-  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT for table `report_cancel`
@@ -406,12 +390,6 @@ ALTER TABLE `report_inventory`
 --
 ALTER TABLE `report_omset`
   MODIFY `id_report_omset` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `report _penjualan`
---
-ALTER TABLE `report _penjualan`
-  MODIFY `id_report_sell` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `report_produksi`
